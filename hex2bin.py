@@ -15,7 +15,7 @@ def hex2bin(filename):
     # transform the data
     data = bytearray()
     data_length = 0
-    data_base = 0x00  # what is this for?
+    # data_base = 0x00  # no use for stc 8051
     for line_number, line in enumerate(hex_file):
         # check start code ':'
         if not line.startswith(":"):
@@ -37,19 +37,15 @@ def hex2bin(filename):
                             (line_number + 1, filename))
         # process record_data
         if record_type == 0:  # Record type: Data
-            data_base += offset
             padding = max(0, offset + byte_count - data_length)
             data_length += padding
             data += bytearray(padding)
             data[offset:offset + byte_count] = record_data
         elif record_type == 1:  # Record type: End Of File
             break
-        elif record_type in [2, 4]:  # Record type: Extended Segment Address
-            shift = record_type**2
-            data_base, = struct.unpack(">H", record_data)
-            data_base = data_base << shift
-        else:  # Record type: 3 Start Segment Address, 5 Start Linear Address
-            raise Exception("Unsupported record type, line %d, in file '%s'" %
+        # Other record types are not for stc 8051
+        else:
+            raise Exception("Record type is not data, line %d, in file '%s'" %
                             (line_number + 1, filename))
     hex_file.close()
     # check if the last record is the End Of File
@@ -61,5 +57,4 @@ def hex2bin(filename):
 
 
 if __name__ == '__main__':
-    for c in hex2bin("sample/led.hex"):
-        print "%02X" % c,
+    print repr(hex2bin("sample/led.hex"))
