@@ -3,7 +3,7 @@
 #
 # Copyright (C) 2016 Zhao Xin 赵鑫 <pythonchallenge@qq.com>
 #
-# STC-GO (宏晶STC8051系列单片机烧录程序)
+# STC-GO (宏晶STC8051系列单片机烧写程序)
 # 作者：赵鑫
 
 import sys
