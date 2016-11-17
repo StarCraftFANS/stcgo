@@ -18,7 +18,7 @@ def hex2bin(filename):
     # transform the data
     data = bytearray()
     data_length = 0
-    # data_base = 0x00  # no use for stc 8051
+    # data_base = 0x00  # no use for STC 8051
     for line_number, line in enumerate(hex_file):
         # check start code ':'
         if not line.startswith(":"):
@@ -34,24 +34,23 @@ def hex2bin(filename):
         except:
             raise Exception("Invalid format, line %d, in file '%s'" %
                             (line_number + 1, filename))
-        # data checksum
+        # check data checksum
         if sum(barray) & 0xFF:
             raise Exception("Incorrect checksum, line %d, in file '%s'" %
                             (line_number + 1, filename))
         # process record_data
-        if record_type == 0:  # Record type: Data
+        if record_type == 0:  # record type: Data
             padding = max(0, offset + byte_count - data_length)
             data_length += padding
             data += bytearray(padding)
             data[offset:offset + byte_count] = record_data
-        elif record_type == 1:  # Record type: End Of File
+        elif record_type == 1:  # record type: End of File
             break
-        # Other record types are not for stc 8051
-        else:
+        else:  # other record types (2, 3, 4, 5) are not for STC 8051
             raise Exception("Record type is not data, line %d, in file '%s'" %
                             (line_number + 1, filename))
     hex_file.close()
-    # check if the last record is the End Of File
+    # check if the last record is the End of File
     if record_type != 1 or byte_count != 0:
         raise Exception("Missing EOF in file '%s'" %
                         (line_number + 1, filename))

@@ -9,8 +9,8 @@
 import sys
 import argparse
 
-STCGO_DESCRIPTION = ("stcgo, a command line program flash tool for STC 8051 "
-                     "series microcontroller.\n"
+STCGO_DESCRIPTION = ("STC-GO, a command line programmer/flash tool for STC "
+                     "8051 series microcontroller.\n"
                      "https://github.com/archtaurus/stcgo")
 STCGO_DEFAULT_PORT = {"win32": "COM3",                                  # WIN
                       "darwi": "/dev/tty.usbserial",                    # MACOS
