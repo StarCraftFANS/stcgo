@@ -1,7 +1,7 @@
 STC-GO
 ======
 
-This project is not ready to use, but **WORKING IN PROGRESS**!!!
+This project is **WORKING IN PROGRESS**!!!
 
 宏晶STC8051系列单片机命令行烧写程序
 
