@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
 import sys
@@ -56,7 +55,3 @@ def hex2bin(filename):
                         (line_number + 1, filename))
     else:
         return data
-
-
-if __name__ == '__main__':
-    print repr(hex2bin("sample/led.hex"))
