@@ -45,13 +45,14 @@ def hex2bin(filename):
             data[address:address + data_size] = record_data
         elif record_type == 1:  # record type: End of File
             hex_file.close()
+            # check the end-of-file is the last record
+            if data_size != 0x00:
+                raise Exception("Missing EOF in file '%s'" %
+                                (line_number, filename))
             break
         else:  # other record types (2, 3, 4, 5) are not for STC 8051
             raise Exception("Record type is not data, line %d, in file '%s'" %
                             (line_number, filename))
-    # check the end-of-file is the last record
-    if record_type != 0x01 or data_size != 0x00:
-        raise Exception("Missing EOF in file '%s'" % (line_number, filename))
     # data is good to go
     return data
 
