@@ -18,24 +18,24 @@ def hex2bin(filename):
     data = bytearray()
     data_length = 0
     # data_base = 0x00  # no use for STC 8051
-    for line_number, line in enumerate(hex_file):
+    for line_number, line in enumerate(hex_file, 1):
         # check start code ':'
         if not line.startswith(":"):
             raise Exception("Missing start code ':', line %d, in file '%s'" %
-                            (line_number + 1, filename))
+                            (line_number, filename))
         try:
-            # remove start code and EOL, and convert it to bytearray
-            barray = bytearray(binascii.a2b_hex(line.strip(":\x0D\x0A")))
+            # remove start code and EOL, and convert the line to bytearray
+            line = bytearray(binascii.a2b_hex(line.strip(":\x0D\x0A")))
             # check data checksum
-            if sum(barray) & 0xFF != 0x00:
+            if sum(line) & 0xFF != 0x00:
                 raise Exception("Incorrect checksum, line %d, in file '%s'" %
-                                (line_number + 1, filename))
-            # unpack the data and check the data format
-            record = struct.unpack(">BHB%dsb" % barray[0], barray)
+                                (line_number, filename))
+            # unpack and check the data format
+            record = struct.unpack(">BHB%dsb" % line[0], line)
             (data_size, address, record_type, record_data, checksum) = record
         except:
             raise Exception("Invalid format, line %d, in file '%s'" %
-                            (line_number + 1, filename))
+                            (line_number, filename))
         # process record_data
         if record_type == 0:  # record type: Data
             padding = max(0, address + data_size - data_length)
@@ -47,14 +47,13 @@ def hex2bin(filename):
             break
         else:  # other record types (2, 3, 4, 5) are not for STC 8051
             raise Exception("Record type is not data, line %d, in file '%s'" %
-                            (line_number + 1, filename))
+                            (line_number, filename))
     hex_file.close()
-    # check if the last record is the End of File
-    if record_type != 1 or data_size != 0:
-        raise Exception("Missing EOF in file '%s'" %
-                        (line_number + 1, filename))
-    else:
-        return data
+    # check the end-of-file is the last record
+    if record_type != 0x01 or data_size != 0x00:
+        raise Exception("Missing EOF in file '%s'" % (line_number, filename))
+    # data is good to go
+    return data
 
 
 if __name__ == '__main__':
