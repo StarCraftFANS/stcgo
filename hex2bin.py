@@ -6,19 +6,17 @@ import binascii
 
 
 def hex2bin(filename):
-    """Read an Intel HEX file, convert the hex data to binary data, and return
-    the data as a bytearray"""
+    """Convert Intel HEX file to binary data, and return as a bytearray"""
     # open the file
     try:
-        hex_file = open(filename, "r")
+        intel_hex_file = open(filename, "r")
     except:
         print "Failed to open file '%s'" % filename
         sys.exit(1)
     # transform the data
     data = bytearray()  # data buffer (to return as result)
     data_length = 0     # data length
-    # data_base = 0x00  # no use for STC 8051
-    for line_number, line in enumerate(hex_file, 1):
+    for line_number, line in enumerate(intel_hex_file, 1):
         # check start code ':'
         if not line.startswith(":"):
             raise Exception("Missing start code ':', line %d, in file '%s'" %
@@ -44,7 +42,7 @@ def hex2bin(filename):
                 data_length += padding
             data[address:address + data_size] = record_data
         elif record_type == 1:  # record type: End of File
-            hex_file.close()
+            intel_hex_file.close()
             break
         else:  # other record types (2, 3, 4, 5) are not for STC 8051
             raise Exception("Record type is not data, line %d, in file '%s'" %
