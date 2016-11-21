@@ -15,8 +15,8 @@ def hex2bin(filename):
         print "Failed to open file '%s'" % filename
         sys.exit(1)
     # transform the data
-    data = bytearray()
-    data_length = 0
+    data = bytearray()  # data buffer (to return as result)
+    data_length = 0     # data length
     # data_base = 0x00  # no use for STC 8051
     for line_number, line in enumerate(hex_file, 1):
         # check start code ':'
@@ -39,7 +39,7 @@ def hex2bin(filename):
         # process record_data
         if record_type == 0:  # record type: Data
             padding = max(0, address + data_size - data_length)
-            if padding:
+            if padding:  # when size of data buffer is not big enough
                 data += bytearray(padding)
                 data_length += padding
             data[address:address + data_size] = record_data
