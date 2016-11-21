@@ -40,7 +40,7 @@ def hex2bin(filename):
             if padding:  # when size of data buffer is not big enough
                 data += bytearray(padding)
                 data_length += padding
-            data[address:address + data_size] = record_data
+            data[address:address + data_size] = record_data  # add record_data
         elif record_type == 1:  # record type: End of File
             intel_hex_file.close()
             break
