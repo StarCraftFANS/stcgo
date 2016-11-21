@@ -25,7 +25,9 @@ class STCGO(object):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=STCGO_DESCRIPTION)
-    parser.add_argument("filename", help="bin/hex/ihx program image filename",
-                        type=str)
+    parser.add_argument("filename", nargs="?",
+                        help="program filename (.bin/.hex/.ihx)")
     args = parser.parse_args()
-    print "Hello, %s!" % args.filename
+
+    if args.filename and args.filename[-4:] in [".bin", ".hex", ".ihx"]:
+        print "ok"
